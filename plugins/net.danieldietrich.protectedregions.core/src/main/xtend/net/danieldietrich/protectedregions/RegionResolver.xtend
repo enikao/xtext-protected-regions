@@ -1,6 +1,7 @@
 package net.danieldietrich.protectedregions
 
 import java.util.regex.Pattern
+import org.eclipse.xtend.lib.annotations.Accessors
 
 /**
  * The prototype for resolvers of protected regions.
@@ -8,19 +9,19 @@ import java.util.regex.Pattern
  * Pass regular expressions for protected region start and end to the constructor.
  * The id has to be the first regex group (denoted by '(' and ')').
  * The enabled part has to be the second regex group.
- * If additional groups are nescessary they have to be disabled using '(?:' and ')'.
+ * If additional groups are necessary they have to be disabled using '(?:' and ')'.
  * Nested groups are allowed, e.g. '(?:xxx(xxx))*'.
  */
 abstract class RegionResolver {
 	
-	@Property val Pattern start
-	@Property val Pattern end
+	@Accessors val Pattern start
+	@Accessors val Pattern end
 	
 	new(String start, String end) {
 		if (start.isNullOrEmpty) throw new IllegalArgumentException("Start cannot be empty")
 		if (end.isNullOrEmpty) throw new IllegalArgumentException("End cannot be empty")
-		this._start = Pattern::compile(start)
-		this._end = Pattern::compile(end)
+		this.start = Pattern::compile(start)
+		this.end = Pattern::compile(end)
 	}
 	
 	def boolean isStart(String region) {

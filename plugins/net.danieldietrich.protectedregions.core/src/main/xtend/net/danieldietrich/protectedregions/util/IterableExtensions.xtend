@@ -1,8 +1,6 @@
 package net.danieldietrich.protectedregions.util
 
-import static extension net.danieldietrich.protectedregions.util.IterableExtensions.*
 import java.util.LinkedHashMap
-import org.eclipse.xtext.xbase.lib.Pair
 
 class IterableExtensions {
 	

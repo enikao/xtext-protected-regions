@@ -3,11 +3,12 @@ package net.danieldietrich.protectedregions.parser
 import static net.danieldietrich.protectedregions.util.Strings.*
 
 import java.util.List
+import org.eclipse.xtend.lib.annotations.Accessors
 
 abstract class TreeExtensions {
 
 	/** Construct a Node. */
-	def static <T> Node Node(String id, Tree<T>... children) {
+	def static <T> Node<T> Node(String id, Tree<T>... children) {
 		val node = new Node<T>(id)
 		children.forEach[node.add(it)]
 		node
@@ -53,7 +54,7 @@ abstract class TreeExtensions {
 	 */
 	def static <T> void traverse(Tree<T> tree, (Tree<T>)=>Boolean f) {
 		val descend = f.apply(tree)
-		if (descend == null || descend) switch tree {
+		if (descend === null || descend) switch tree {
 			Node<T> : tree.children.forEach[traverse(it, f)]
 		}
 	}
@@ -62,16 +63,16 @@ abstract class TreeExtensions {
 
 abstract class Tree<T> {
 	
-	@Property val String id // identifier, not necessarily unique
-	@Property var Node<T> parent = null
+	@Accessors val String id // identifier, not necessarily unique
+	@Accessors var Node<T> parent = null
 	
 	new(String id) {
-		if (id == null) throw new IllegalArgumentException("Id cannot be null")
-		this._id = id
+		if (id === null) throw new IllegalArgumentException("Id cannot be null")
+		this.id = id
 	}
 	
-	def isRoot() { _parent == null }
-	def Tree<T> root() { if (isRoot) this else _parent.root() }
+	def isRoot() { parent === null }
+	def Tree<T> root() { if (isRoot) this else parent.root() }
 	
 	override toString() { toString(0) }
 	def String toString(int depth)
@@ -80,48 +81,48 @@ abstract class Tree<T> {
 
 class Node<T> extends Tree<T> {
 	
-	@Property val List<Tree<T>> children = newArrayList()
+	@Accessors val List<Tree<T>> children = newArrayList()
 	
 	new(String id) {
 		super(id)
 	}
 	
 	def add(Tree<T> child) {
-		_children.add(child)
+		children.add(child)
 		child.parent = this
 		child
 	}
 	
 	override toString(int depth) {
 		val indent = indent(depth)
-		indent + id +"(\n"+ _children.map[Tree<T> child | child.toString(depth+1)].reduce[l,r | l +",\n"+ r] +"\n"+ indent +")"
+		indent + id +"(\n"+ children.map[Tree<T> child | child.toString(depth+1)].reduce[l,r | l +",\n"+ r] +"\n"+ indent +")"
 	}
 
 }
 
 class Leaf<T> extends Tree<T> {
 
-	@Property val T value
+	@Accessors val T value
 
 	new(String id, T value) {
 		super(id)
-		this._value = value
+		this.value = value
 	}
 	
 	override toString(int depth) {
 		val indent = indent(depth)
-		indent + id +"("+ _value.toString.replaceAll("\\s+", " ") +")"
+		indent + id +"("+ value.toString.replaceAll("\\s+", " ") +")"
 	}
 	
 }
 
 class NodeLink<T> extends Node<T> {
 	
-	@Property Node<T> ref
+	@Accessors Node<T> ref
 	
 	new(Node<T> ref) {
 		super('Link->'+ ref.id)
-		this._ref = ref
+		this.ref = ref
 	}
 	
 	override getChildren() { ref.children }
@@ -139,11 +140,11 @@ class NodeLink<T> extends Node<T> {
 
 class LeafLink<T> extends Leaf<T> {
 	
-	@Property Leaf<T> ref
+	@Accessors Leaf<T> ref
 	
 	new(Leaf<T> ref) {
 		super('Link->'+ ref.id, null)
-		this._ref = ref
+		this.ref = ref
 	}
 
 	override getValue() { ref.value }

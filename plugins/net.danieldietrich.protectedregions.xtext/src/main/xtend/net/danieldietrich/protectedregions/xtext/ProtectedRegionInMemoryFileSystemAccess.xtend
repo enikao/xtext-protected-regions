@@ -14,7 +14,7 @@ import org.eclipse.xtext.generator.OutputConfiguration
 import org.slf4j.LoggerFactory
 import java.util.ArrayList
 
-// @@UPDATE-INFO: Check class hierarchie for new API annotated with @since
+// @@UPDATE-INFO: Check class hierarchy for new API annotated with @since
 class ProtectedRegionInMemoryFileSystemAccess extends InMemoryFileSystemAccess {
 	
 	static val logger = LoggerFactory::getLogger(typeof(ProtectedRegionJavaIoFileSystemAccess))
@@ -52,17 +52,17 @@ class ProtectedRegionInMemoryFileSystemAccess extends InMemoryFileSystemAccess {
 	
 	def private dir(String path, String outputName) {
 		if (!path.endsWith('/')) throw new IllegalStateException("No dir: "+ path)
-		new InMemoryFile(files, outputName, path)
+		new InMemoryFile(textFiles, outputName, path)
 	}
 	
 	def private file(String path, String outputName) {
 		if (path.endsWith('/')) throw new IllegalStateException("No file: "+ path)
-		new InMemoryFile(files, outputName, path)
+		new InMemoryFile(textFiles, outputName, path)
 	}
 	
 	override toString() {
-		files.keySet.sort.fold(new StringBuffer)[buf, path |
-			buf.append(path +" ("+ files.get(path).length +" bytes)\n")
+		textFiles.keySet.sort.fold(new StringBuffer)[buf, path |
+			buf.append(path +" ("+ textFiles.get(path).length +" bytes)\n")
 			buf
 		].toString
 	}
@@ -106,7 +106,7 @@ class InMemoryFile extends File {
 	override toURI() { outputName+path }
 	
 	override equals(Object o) {
-		o != null && switch o {
+		o !== null && switch o {
 			InMemoryFile : o.path == path
 			default : false
 		}

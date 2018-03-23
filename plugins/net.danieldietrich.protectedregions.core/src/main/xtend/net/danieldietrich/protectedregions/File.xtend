@@ -39,7 +39,7 @@ class JavaIoFile extends File {
 	override toURI() { file.toURI.toString }
 	
 	override equals(Object o) {
-		o != null && switch o {
+		o !== null && switch o {
 			JavaIoFile : o.file == file
 			default : false
 		}

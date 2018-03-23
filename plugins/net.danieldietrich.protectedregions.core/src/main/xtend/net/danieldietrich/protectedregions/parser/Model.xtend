@@ -1,12 +1,12 @@
 package net.danieldietrich.protectedregions.parser
 
-import static extension net.danieldietrich.protectedregions.parser.ElementExtensions.*
-import static extension net.danieldietrich.protectedregions.parser.TreeExtensions.*
-import static extension net.danieldietrich.protectedregions.util.IterableExtensions.*
+import java.util.regex.Pattern
+import org.eclipse.xtend.lib.annotations.Data
 
 import static net.danieldietrich.protectedregions.parser.Match.*
 
-import java.util.regex.Pattern
+import static extension net.danieldietrich.protectedregions.parser.ElementExtensions.*
+import static extension net.danieldietrich.protectedregions.parser.TreeExtensions.*
 
 abstract class ModelExtensions {
 	
@@ -165,7 +165,7 @@ class None extends Element {
 	
 }
 
-/** An reqular expression element. */
+/** An regular expression element. */
 class RegEx extends Element {
 	
 	val Pattern pattern
@@ -201,7 +201,7 @@ class Seq extends Element {
 	/** Matches the concatenation of this sequence or NOT_FOUND. */
 	override indexOf(String source, int index) {
 		sequence.fold(null as Match)[match, element |
-			if (match == null) {
+			if (match === null) {
 				element.indexOf(source, index) // start at the index of first element of Seq (or NOT_FOUND)
 			} else if (match == NOT_FOUND) {
 				NOT_FOUND // if one element NOT_FOUND, Seq is NOT_FOUND
@@ -236,7 +236,7 @@ class Some extends Element {
 	/** Returns the Match of the Element occurring first or NOT_FOUND. */
 	override indexOf(String source, int index) {
 		val e = elements.reduce(e1, e2 | if (e1.ahead(e2, source, index)) e1 else e2)
-		if (e == null) NOT_FOUND else e.indexOf(source, index)
+		if (e === null) NOT_FOUND else e.indexOf(source, index)
 	}
 	
 	override String toString() {

@@ -35,9 +35,9 @@ class ProtectedRegionParserTest {
 		val msg = "xml parser: Str(') not found at [4,23]"
 		try {
 			xmlParser.parse(xmlContent_corrupted)
-			throw new RuntimeException('''Parser didn't recognized corrupted xml. Expected IllegalStateException('Â«msgÂ»')''')
+			throw new RuntimeException('''Parser didn't recognized corrupted xml. Expected IllegalStateException('«msg»')''')
 		} catch(IllegalStateException x) {
-			assertEquals('''Parser threw unexpected exception message. Expected 'Â«msgÂ»' but found 'Â«x.messageÂ»'.''', msg, x.message)
+			assertEquals('''Parser threw unexpected exception message. Expected '«msg»' but found '«x.message»'.''', msg, x.message)
 		}
 	}
 	
@@ -62,16 +62,16 @@ class ProtectedRegionParserTest {
 		val regions = parser.parse(content)
 		val parsed = regions.fold(new StringBuffer)[buf, region | buf.append(region.content)].toString
 		
-		assertEquals('''Â«msgÂ»\n\nExpected:\n###Â«contentÂ»###\n\nFound:\n###Â«parsedÂ»###''', parsed, content.toString)
+		assertEquals('''«msg»\n\nExpected:\n###«content»###\n\nFound:\n###«parsed»###''', parsed, content.toString)
 		
 	}
 	
 	def private assertSizeEqualsExpected(Iterable<Region> regions, int expected) {
-		assertTrue('''Expected 1 region but found Â«regions.sizeÂ»''', regions.size == 1)
+		assertTrue('''Expected 1 region but found «regions.size»''', regions.size == 1)
 	}
 	
 	def private assertIdEqualsExpected(String id, String expected) {
-		assertTrue('''Found id Â«idÂ» but expected Â«expectedÂ»''', id == expected)
+		assertTrue('''Found id «id» but expected «expected»''', id == expected)
 	}
 	
 	val lateBindingContent = '''
@@ -136,7 +136,7 @@ class ProtectedRegionParserTest {
 	'''
 	
 	val xtendContent = {
-		"'''This is Â«\"\\\"a\"Â» rich Â«\"'''\"Â»stringÂ«\"'''\"Â» which ends here:'''"
+		"'''This is «\"\\\"a\"» rich «\"'''\"»string«\"'''\"» which ends here:'''"
 	}
 
 }

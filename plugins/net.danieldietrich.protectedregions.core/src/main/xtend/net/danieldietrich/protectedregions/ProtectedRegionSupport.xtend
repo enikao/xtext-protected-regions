@@ -1,23 +1,21 @@
 package net.danieldietrich.protectedregions
 
-import static net.danieldietrich.protectedregions.ProtectedRegionSupport.*
-import static extension net.danieldietrich.protectedregions.util.IterableExtensions.*
-
 import java.nio.charset.Charset
 import java.util.List
 import java.util.Map
-
-import net.danieldietrich.protectedregions.util.Box
-
-import org.slf4j.LoggerFactory
 import java.util.Set
+import net.danieldietrich.protectedregions.util.Box
+import org.eclipse.xtend.lib.annotations.Accessors
+import org.slf4j.LoggerFactory
+
+import static extension net.danieldietrich.protectedregions.util.IterableExtensions.*
 
 class ProtectedRegionSupport {
 	
 	static val logger = LoggerFactory::getLogger(typeof(ProtectedRegionSupport))
 	
 	/** By default the protected region support traverses all output dirs. */
-	@Property var FileFilter dirFilter = new AcceptAllFilter()
+	@Accessors var FileFilter dirFilter = new AcceptAllFilter()
 	
 	/** Map of parsers by FileFilter (in insertion-order). */
 	val Map<FileFilter, ProtectedRegionParser> parsers = newLinkedHashMap()
@@ -169,7 +167,7 @@ class ProtectedRegionSupport {
 		parser.parse(contents)
 	}
 	
-	/** Return all parsers which are applyable to the given file. */
+	/** Return all parsers which are applicable to the given file. */
 	def private parsers(File file) {
 		parsers.keySet.filter[accept(file)].map[parsers.get(it)]
 	}

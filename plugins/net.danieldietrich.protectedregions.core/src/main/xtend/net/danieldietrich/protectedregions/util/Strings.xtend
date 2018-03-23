@@ -9,7 +9,7 @@ abstract class Strings {
 	static val EOL = Pattern::compile("\\r\\n|\\n|\\r")
 	
 	/**
-	 * Returnes times * 2 spaces.
+	 * Returns times * 2 spaces.
 	 */
 	def static indent(int times) {
 		var buf = new StringBuffer()

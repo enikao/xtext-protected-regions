@@ -1,14 +1,13 @@
 package net.danieldietrich.protectedregions
 
-import static org.junit.Assert.*
-
 import com.google.inject.Guice
-
 import java.io.FileNotFoundException
 import java.nio.charset.Charset
-
+import org.eclipse.xtend.lib.annotations.Data
 import org.junit.Before
 import org.junit.Test
+
+import static org.junit.Assert.*
 
 /**
  * Note: These test cases access the file system instead of passing
@@ -103,7 +102,7 @@ class ProtectedRegionSupportTest {
 		]).parse("src/test/resources/nested_comments.txt".file.read)
 		
 		// Scala does not recognize nested comment-like id's
-		assertTrue(regions.findFirst[id == "1234"] != null)
+		assertTrue(regions.findFirst[id == "1234"] !== null)
 		
 	}
 
@@ -123,7 +122,7 @@ class ProtectedRegionSupportTest {
 		// GOLDEN RULE: xtext-protected-regions reads valid code only
 		// => this case cannot occur
 		// => the following xpr behavior is ok:
-		assertTrue(regions.findFirst[id == "1234"] != null)
+		assertTrue(regions.findFirst[id == "1234"] !== null)
 		
 	}
 	
@@ -148,19 +147,19 @@ class ProtectedRegionSupportTest {
 	@Test
 	def void xmlCDataShouldBeIgnored() {
 		val regions = xmlParser.parse("src/test/resources/ignore_xml_cdata.txt".file.read)
-		assertTrue(regions.findFirst[id == "no.id"] == null)
+		assertTrue(regions.findFirst[id == "no.id"] === null)
 	}
 	
 	@Test
 	def void javaStringsShouldBeIgnored() {
 		val regions = javaParser.parse("src/test/resources/ignore_java_strings.txt".file.read)
-		assertTrue(regions.findFirst[id == "no.id"] == null)
+		assertTrue(regions.findFirst[id == "no.id"] === null)
 	}
 
 	@Test
 	def void javaStringEscapesShouldBeIdentified() {
 		val regions = javaParser.parse("src/test/resources/ignore_java_string_escapes.txt".file.read)
-		assertTrue(regions.findFirst[id == "no.id"] == null)
+		assertTrue(regions.findFirst[id == "no.id"] === null)
 	}
 
 	@Test(expected = typeof(IllegalStateException))
@@ -217,7 +216,7 @@ class ProtectedRegionSupportTest {
 @Data class SingleFileFilter extends FileFilter {
 	val File file
 	override accept(File file) {
-		_file.equals(file)
+		file.equals(file)
 	}
 }
 

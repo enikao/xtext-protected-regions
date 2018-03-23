@@ -1,26 +1,21 @@
 package net.danieldietrich.protectedregions.xtext
 
 import com.google.common.io.CharStreams
-import com.google.common.io.InputSupplier
 import com.google.inject.Inject
-
-import java.io.InputStream
+import java.io.InputStreamReader
 import java.nio.charset.Charset
 import java.util.Map
-
 import net.danieldietrich.protectedregions.File
 import net.danieldietrich.protectedregions.ProtectedRegionSupport
-
 import org.eclipse.core.resources.IFile
 import org.eclipse.core.resources.IFolder
 import org.eclipse.core.resources.IResource
 import org.eclipse.xtext.builder.EclipseResourceFileSystemAccess2
 import org.eclipse.xtext.generator.OutputConfiguration
-
 import org.slf4j.LoggerFactory
 
 // NOTE: JDTAwareEclipseResourceFileSystemAccess2 is currently used in xtend only
-// @@UPDATE-INFO: Check class hierarchie for new API annotated with @since
+// @@UPDATE-INFO: Check class hierarchy for new API annotated with @since
 class ProtectedRegionEclipseResourceFileSystemAccess2 extends EclipseResourceFileSystemAccess2 {
 	
 	static val logger = LoggerFactory::getLogger(typeof(ProtectedRegionEclipseResourceFileSystemAccess2))
@@ -67,7 +62,7 @@ class ProtectedRegionEclipseResourceFileSystemAccess2 extends EclipseResourceFil
 	}
 	
 	def private file(OutputConfiguration config) {
-		new EclipseResourceFile(getFolder(config))
+		new EclipseResourceFile(getContainer(config))
 	}
 	
 }
@@ -107,9 +102,8 @@ class EclipseResourceFile extends File {
 	override read(Charset charset) {
 		switch resource {
 			IFile : {
-				val InputSupplier<? extends InputStream> streamSupplier = [|resource.contents]
-				val readerSupplier = CharStreams::newReaderSupplier(streamSupplier, charset)
-				CharStreams::toString(readerSupplier) // Guava handles closing resources
+				val reader = new InputStreamReader(resource.contents, charset)
+				CharStreams::toString(reader) // Guava handles closing resources
 			}
 			default : throw new UnsupportedOperationException("No IFile")
 		}
@@ -119,7 +113,7 @@ class EclipseResourceFile extends File {
 	}
 	
 	override equals(Object o) {
-		o != null && switch o {
+		o !== null && switch o {
 			EclipseResourceFile : o.resource == resource
 			default : false
 		}

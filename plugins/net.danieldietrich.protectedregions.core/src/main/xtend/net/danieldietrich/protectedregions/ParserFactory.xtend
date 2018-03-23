@@ -1,17 +1,18 @@
 package net.danieldietrich.protectedregions
 
-import static extension net.danieldietrich.protectedregions.parser.ElementExtensions.*
-import static extension net.danieldietrich.protectedregions.parser.ModelExtensions.*
-import static extension net.danieldietrich.protectedregions.parser.TreeExtensions.*
-
 import com.google.inject.Inject
 import java.util.List
-import net.danieldietrich.protectedregions.DefaultProtectedRegionResolver
-import net.danieldietrich.protectedregions.RegionResolver
 import net.danieldietrich.protectedregions.parser.Element
 import net.danieldietrich.protectedregions.parser.Leaf
 import net.danieldietrich.protectedregions.parser.Node
 import net.danieldietrich.protectedregions.parser.Parser
+import org.eclipse.xtend.lib.annotations.Accessors
+import org.eclipse.xtend.lib.annotations.Data
+
+import static net.danieldietrich.protectedregions.parser.ModelExtensions.*
+
+import static extension net.danieldietrich.protectedregions.parser.ElementExtensions.*
+import static extension net.danieldietrich.protectedregions.parser.TreeExtensions.*
 
 class ParserFactory {
 	
@@ -94,7 +95,7 @@ class RegionBuffer {
 	
 	/** Called when a protected region start is found in the AST. */
 	def void begin(String start, String id, boolean enabled, boolean inverse) {
-		if (this.id != null) {
+		if (this.id !== null) {
 			// TODO: Message like "Detected ... between (5,7) and (5,32), near [ PROTECTED REGION END ]."
 			// Github Issue #33
 			throw new IllegalStateException("Trying to start a region with id '"+ id +"' within a region with id '"+ this.id +"'")
@@ -110,7 +111,7 @@ class RegionBuffer {
 	
 	/** Called when a protected region end is found in the AST. */
 	def void end(String end, boolean inverse) {
-		if (id == null) {
+		if (id === null) {
 			// TODO: Message like "Detected marked region end without corresponding marked region start between (5,7) and (5,32), near [ PROTECTED REGION END ]."
 			// Github Issue #33
 			throw new IllegalStateException("Missing region start")
@@ -132,7 +133,7 @@ class RegionBuffer {
 	/** Called once at the end of AST processing to retrieve the result. */
 	def Iterable<Region> get() {
 		// Github Issue #33
-		if (id != null) throw new IllegalStateException("Missing end of last region with id '"+ id +"'")
+		if (id !== null) throw new IllegalStateException("Missing end of last region with id '"+ id +"'")
 		if (buf.length > 0) {
 			regions.add(new Region(id, buf.toString, enabled))
 		}
@@ -148,17 +149,17 @@ class RegionBuffer {
 	val String content
 	val Boolean enabled
 
-	def isMarked() { id != null }
+	def isMarked() { id !== null }
 	
 }
 
-/** A parser wrapper which postprocesses the resultung AST.  */
+/** A parser wrapper which post-processes the resulting AST.  */
 class ProtectedRegionParser {
 	
 	// dirty: parser has to be set after object creation because of cyclic dependency to model
-	@Property var Parser parser = null
-	@Property var RegionResolver resolver = new DefaultProtectedRegionResolver()
-	@Property var boolean inverse = false
+	@Accessors var Parser parser = null
+	@Accessors var RegionResolver resolver = new DefaultProtectedRegionResolver()
+	@Accessors var boolean inverse = false
 	
 	def parse(CharSequence input) {
 		

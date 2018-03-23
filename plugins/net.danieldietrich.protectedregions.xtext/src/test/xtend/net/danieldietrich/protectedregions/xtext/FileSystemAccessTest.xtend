@@ -30,13 +30,13 @@ class FileSystemAccessTest {
 		val expectedFile = "src/test/resources/multilang_expected.html"
 
 		val fsa = createProtectedRegionInMemoryFileSystemAccess() => [
-			files => [ addFile(previousFile) ]
+			allFiles => [ addFile(previousFile) ]
 			support.addParser(xmlParser, ".html") // ~ htmlParser
 			setOutputPath("src/test/resources/")
 			generateFile(previousFile, currentFile.read)
 		]
 				
-		val mergedContents = fsa.files.get(DEFAULT_OUTPUT+previousFile)
+		val mergedContents = fsa.textFiles.get(DEFAULT_OUTPUT+previousFile)
 		val expectedContents = expectedFile.read
 		
 		assertEquals(expectedContents, mergedContents)
@@ -47,7 +47,7 @@ class FileSystemAccessTest {
 	def void nonUniqueIdsShouldBeGloballyDetected() {
 
 		val fsa = createProtectedRegionInMemoryFileSystemAccess() => [
-			files => [
+			allFiles => [
 				addFile("src/test/resources/duplicate_id_1.java")
 				addFile("src/test/resources/duplicate_id_2.java")
 			]
@@ -66,7 +66,7 @@ class FileSystemAccessTest {
 	def void protectedRegionStartInStringLiteralShouldBeIgnored() {
 
 		createProtectedRegionInMemoryFileSystemAccess() => [
-			files => [
+			allFiles => [
 				addFile("src/test/resources/string_literals_ignore_start.java")
 			]
 			support.addParser(javaParser, ".java")
@@ -79,7 +79,7 @@ class FileSystemAccessTest {
 	def void protectedRegionEndInStringLiteralShouldBeIgnored() {
 
 		createProtectedRegionInMemoryFileSystemAccess() => [
-			files => [
+			allFiles => [
 				addFile("src/test/resources/string_literals_ignore_end.java")
 			]
 			support.addParser(javaParser, ".java")
@@ -92,7 +92,7 @@ class FileSystemAccessTest {
 	def void protectedRegionStartInXmlCDATAShouldBeIgnored() {
 
 		createProtectedRegionInMemoryFileSystemAccess() => [
-			files => [
+			allFiles => [
 				addFile("src/test/resources/string_literals_ignore_cdata.xml")
 			]
 			support.addParser(xmlParser, ".xml")
@@ -105,7 +105,7 @@ class FileSystemAccessTest {
 	def void commentsInStringLiteralsShouldBeIgnored() {
 
 		createProtectedRegionInMemoryFileSystemAccess() => [
-			files => [
+			allFiles => [
 				addFile("src/test/resources/string_literals_ignore_comments.java")
 			]
 			support.addParser(javaParser, ".java")
@@ -118,7 +118,7 @@ class FileSystemAccessTest {
 	def void ensureStringLiteralsParsedCorrectly() {
 
 		createProtectedRegionInMemoryFileSystemAccess() => [
-			files => [
+			allFiles => [
 				addFile("src/test/resources/ensure_str_literals_parsed_correctly.java")
 			]
 			support.addParser(javaParser, ".java")
@@ -127,7 +127,7 @@ class FileSystemAccessTest {
 		
 	}
 
-	def private addFile(Map<String,CharSequence> files, String fileName) {
+	def private addFile(Map<String,Object> files, String fileName) {
 		files.put(DEFAULT_OUTPUT+fileName, fileName.read)
 	}
 

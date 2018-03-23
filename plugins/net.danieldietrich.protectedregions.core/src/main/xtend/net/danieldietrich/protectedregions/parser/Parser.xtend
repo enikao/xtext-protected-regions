@@ -1,9 +1,11 @@
 package net.danieldietrich.protectedregions.parser
 
-import static extension net.danieldietrich.protectedregions.parser.ModelExtensions.*
-import static extension net.danieldietrich.protectedregions.parser.TreeExtensions.*
+import org.eclipse.xtend.lib.annotations.Data
 
 import static net.danieldietrich.protectedregions.util.Strings.*
+
+import static extension net.danieldietrich.protectedregions.parser.ModelExtensions.*
+import static extension net.danieldietrich.protectedregions.parser.TreeExtensions.*
 
 /**
  * The underlying model of the parser denotes some kind of grammar. It is a tree, consisting of nodes and leafs.

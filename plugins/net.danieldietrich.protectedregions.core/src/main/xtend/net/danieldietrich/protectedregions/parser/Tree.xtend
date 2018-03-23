@@ -28,8 +28,8 @@ abstract class TreeExtensions {
 	}
 	
 	/** Example: node.leafs.find('xxx') */
-	def static <T, X extends Tree<T>> X find(Iterable<X> children, String _id) {
-		children.findFirst[id.equals(_id)]
+	def static <T, X extends Tree<T>> X find(Iterable<X> children, String searchedId) {
+		children.findFirst[it.id.equals(searchedId)]
 	}
 	
 	/** Return all children of type Leaf. */

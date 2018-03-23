@@ -169,7 +169,9 @@ class ProtectedRegionSupport {
 	
 	/** Return all parsers which are applicable to the given file. */
 	def private parsers(File file) {
-		parsers.keySet.filter[accept(file)].map[parsers.get(it)]
+		parsers.keySet.filter[
+			accept(file)
+		].map[parsers.get(it)]
 	}
 	
 }

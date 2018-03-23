@@ -216,7 +216,7 @@ class ProtectedRegionSupportTest {
 @Data class SingleFileFilter extends FileFilter {
 	val File file
 	override accept(File file) {
-		file.equals(file)
+		this.file.equals(file)
 	}
 }
 
